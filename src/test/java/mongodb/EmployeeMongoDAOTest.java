@@ -1,7 +1,5 @@
 package mongodb;
 
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
 import connections.ConnectionManager;
 import org.junit.Before;
 import org.junit.Test;
