@@ -8,18 +8,18 @@ import java.util.List;
 
 public class EmployeeMongoDAOTest {
 
-    @Test
-    public void mongoTest() {
-        List<String> dbs = MongoDBClient.mongoClient.getDatabaseNames();
-        for(String db : dbs){
-            System.out.println(db);
-        }
+  @Test
+  public void mongoTest() {
+    List<String> dbs = MongoDBClient.mongoClient.getDatabaseNames();
+    for(String db : dbs){
+      System.out.println(db);
     }
+  }
 
-    @Before
-    public void setUp() {
-        ConnectionManager.getInstance().initMongo();
-    }
+  @Before
+  public void setUp() {
+    ConnectionManager.getInstance().initMongo();
+  }
 
 }
 
