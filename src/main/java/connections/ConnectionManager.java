@@ -14,8 +14,8 @@ public class ConnectionManager {
     private ConnectionManager() {
     }
 
-    public void initMongo() {
-        MongoDBClient.mongoClient = new MongoClient("localhost" , 27017);
+    public void initMongo(MongoClient mongoDBClient) {
+        MongoDBClient.mongoClient = mongoDBClient;
     }
 
 }

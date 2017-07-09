@@ -1,24 +1,26 @@
 package mongodb;
 
+import com.github.fakemongo.Fongo;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import connections.ConnectionManager;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 public class EmployeeMongoDAOTest {
-
-  @Test
-  public void mongoTest() {
-    List<String> dbs = MongoDBClient.mongoClient.getDatabaseNames();
-    for(String db : dbs){
-      System.out.println(db);
-    }
-  }
 
   @Before
   public void setUp() {
-    ConnectionManager.getInstance().initMongo();
+    Fongo fongo = new Fongo("");
+    ConnectionManager.getInstance().initMongo(fongo.getMongo());
+    DBCollection collection = MongoDBClient.mongoClient.getDB("mydb").getCollection("mycollection");
+    collection.insert(new BasicDBObject("name", "jon"));
+  }
+
+  @Test
+  public void mongoTest() {
+    new EmployeeMongoDAO().printDatabases();
+    new EmployeeMongoDAO().printDBCollections("mydb");
   }
 
 }
