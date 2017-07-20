@@ -1,6 +1,5 @@
 package kafka.consumers;
 
-import com.google.common.io.Resources;
 import org.HdrHistogram.Histogram;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -9,20 +8,16 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.Random;
 
 public class Consumer {
 
   public static void main(String[] args) throws IOException {
-    // set up house-keeping
     ObjectMapper mapper = new ObjectMapper();
     Histogram stats = new Histogram(1, 10000000, 2);
     Histogram global = new Histogram(1, 10000000, 2);
 
-    // and the consumer
     KafkaConsumer<String, String> consumer;
     Properties props = new Properties();
     props.put("bootstrap.servers", "localhost:9092");
@@ -35,9 +30,7 @@ public class Consumer {
     consumer = new KafkaConsumer<>(props);
     consumer.subscribe(Arrays.asList("fast-messages", "summary-markers"));
     int timeouts = 0;
-    //noinspection InfiniteLoopStatement
     while (true) {
-      // read records with a short timeout. If we time out, we don't really care.
       ConsumerRecords<String, String> records = consumer.poll(200);
       if (records.count() == 0) {
         timeouts++;
