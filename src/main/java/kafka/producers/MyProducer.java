@@ -1,15 +1,17 @@
 package kafka.producers;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.io.IOException;
 import java.util.Properties;
 
-public class Producer {
+public class MyProducer {
+
+  public static Producer<String, String> producer;
 
   public static void main(String[] args) throws IOException {
-    KafkaProducer<String, String> producer;
     Properties props = new Properties();
     props.put("bootstrap.servers", "localhost:9092");
     props.put("acks", "all");

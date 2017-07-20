@@ -11,14 +11,15 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class Consumer {
+public class MyConsumer {
+
+  public static KafkaConsumer<String, String> consumer;
 
   public static void main(String[] args) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     Histogram stats = new Histogram(1, 10000000, 2);
     Histogram global = new Histogram(1, 10000000, 2);
 
-    KafkaConsumer<String, String> consumer;
     Properties props = new Properties();
     props.put("bootstrap.servers", "localhost:9092");
     props.put("group.id", "test");

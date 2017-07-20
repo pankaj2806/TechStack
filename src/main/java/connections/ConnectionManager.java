@@ -1,6 +1,7 @@
 package connections;
 
 import com.mongodb.MongoClient;
+import kafka.producers.MyProducer;
 import mongodb.MongoDBClient;
 import org.apache.kafka.clients.producer.Producer;
 
@@ -19,8 +20,8 @@ public class ConnectionManager {
     MongoDBClient.mongoClient = mongoDBClient;
   }
 
-  public void initProducer(Producer producer) {
-
+  public void initProducer(Producer<String, String> producer) {
+    MyProducer.producer = producer;
   }
 
 }
