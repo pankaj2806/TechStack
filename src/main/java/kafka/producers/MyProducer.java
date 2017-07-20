@@ -12,17 +12,7 @@ public class MyProducer {
   public static Producer<String, String> producer;
 
   public static void main(String[] args) throws IOException {
-    Properties props = new Properties();
-    props.put("bootstrap.servers", "localhost:9092");
-    props.put("acks", "all");
-    props.put("retries", 0);
-    props.put("batch.size", 16384);
-    props.put("linger.ms", 1);
-    props.put("buffer.memory", 33554432);
-    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-
-    producer = new KafkaProducer<>(props);
+    producer = getLocalProducer();
     try {
       for (int i = 0; i < 1000000; i++) {
         producer.send(new ProducerRecord<>("fast-messages",
@@ -44,4 +34,18 @@ public class MyProducer {
     }
 
   }
+
+  public static Producer<String, String> getLocalProducer() {
+    Properties props = new Properties();
+    props.put("bootstrap.servers", "localhost:9092");
+    props.put("acks", "all");
+    props.put("retries", 0);
+    props.put("batch.size", 16384);
+    props.put("linger.ms", 1);
+    props.put("buffer.memory", 33554432);
+    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+    return new KafkaProducer<>(props);
+  }
+
 }
