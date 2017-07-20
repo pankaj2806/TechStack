@@ -13,12 +13,18 @@ public class Producer {
   public static void main(String[] args) throws IOException {
     // set up the producer
     KafkaProducer<String, String> producer;
-    try (InputStream props = Resources.getResource("producer.props").openStream()) {
-      Properties properties = new Properties();
-      properties.load(props);
-      producer = new KafkaProducer<>(properties);
-    }
 
+    Properties props = new Properties();
+    props.put("bootstrap.servers", "localhost:9092");
+    props.put("acks", "all");
+    props.put("retries", 0);
+    props.put("batch.size", 16384);
+    props.put("linger.ms", 1);
+    props.put("buffer.memory", 33554432);
+    props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+    props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+    producer = new KafkaProducer<>(props);
     try {
       for (int i = 0; i < 1000000; i++) {
         // send lots of messages

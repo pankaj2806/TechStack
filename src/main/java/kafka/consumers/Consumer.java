@@ -24,14 +24,15 @@ public class Consumer {
 
     // and the consumer
     KafkaConsumer<String, String> consumer;
-    try (InputStream props = Resources.getResource("consumer.props").openStream()) {
-      Properties properties = new Properties();
-      properties.load(props);
-      if (properties.getProperty("group.id") == null) {
-        properties.setProperty("group.id", "group-" + new Random().nextInt(100000));
-      }
-      consumer = new KafkaConsumer<>(properties);
-    }
+    Properties props = new Properties();
+    props.put("bootstrap.servers", "localhost:9092");
+    props.put("group.id", "test");
+    props.put("enable.auto.commit", "true");
+    props.put("auto.commit.interval.ms", "1000");
+    props.put("session.timeout.ms", "30000");
+    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+    consumer = new KafkaConsumer<>(props);
     consumer.subscribe(Arrays.asList("fast-messages", "summary-markers"));
     int timeouts = 0;
     //noinspection InfiniteLoopStatement
