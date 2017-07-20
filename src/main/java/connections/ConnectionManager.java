@@ -2,20 +2,25 @@ package connections;
 
 import com.mongodb.MongoClient;
 import mongodb.MongoDBClient;
+import org.apache.kafka.clients.producer.Producer;
 
 public class ConnectionManager {
 
-    private static ConnectionManager connectionManager = new ConnectionManager();
+  private static ConnectionManager connectionManager = new ConnectionManager();
 
-    public static ConnectionManager getInstance() {
-        return connectionManager;
-    }
+  public static ConnectionManager getInstance() {
+    return connectionManager;
+  }
 
-    private ConnectionManager() {
-    }
+  private ConnectionManager() {
+  }
 
-    public void initMongo(MongoClient mongoDBClient) {
-        MongoDBClient.mongoClient = mongoDBClient;
-    }
+  public void initMongo(MongoClient mongoDBClient) {
+    MongoDBClient.mongoClient = mongoDBClient;
+  }
+
+  public void initProducer(Producer producer) {
+
+  }
 
 }
