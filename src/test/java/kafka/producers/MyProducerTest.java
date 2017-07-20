@@ -1,0 +1,28 @@
+package kafka.producers;
+
+import connections.ConnectionManager;
+import org.apache.kafka.clients.producer.MockProducer;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class MyProducerTest {
+
+  @Before
+  public void setUp() throws Exception {
+    ConnectionManager.getInstance().initProducer(new MockProducer<>());
+  }
+
+  @After
+  public void tearDown() throws Exception {
+
+  }
+
+  @Test
+  public void sendSampleMessages() throws Exception {
+    MyProducer.sendSampleMessages();
+  }
+
+}
