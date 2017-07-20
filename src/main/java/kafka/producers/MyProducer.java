@@ -13,6 +13,10 @@ public class MyProducer {
 
   public static void main(String[] args) throws IOException {
     producer = getLocalProducer();
+    sendSampleMessages();
+  }
+
+  public static void sendSampleMessages() {
     try {
       for (int i = 0; i < 1000000; i++) {
         producer.send(new ProducerRecord<>("fast-messages",
@@ -32,7 +36,6 @@ public class MyProducer {
     } finally {
       producer.close();
     }
-
   }
 
   public static Producer<String, String> getLocalProducer() {
