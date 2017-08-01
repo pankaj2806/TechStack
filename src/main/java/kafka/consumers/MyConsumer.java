@@ -5,11 +5,15 @@ import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.TopicPartition;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 public class MyConsumer {
@@ -25,10 +29,16 @@ public class MyConsumer {
     ObjectMapper mapper = new ObjectMapper();
     Histogram stats = new Histogram(1, 10000000, 2);
     Histogram global = new Histogram(1, 10000000, 2);
-    consumer.subscribe(Arrays.asList("fast-messages", "summary-markers"));
+//    consumer.subscribe(Arrays.asList("fast-messages", "summary-markers"));
+    TopicPartition topicPartition = new TopicPartition("fast-messages", 0);
+    List<PartitionInfo> partitionInfos = consumer.partitionsFor("fast-messages");
+    consumer.assign(Collections.singletonList(topicPartition));
+//    consumer.seek(topicPartition, 5975484l);
+    consumer.seekToEnd(Collections.singletonList(topicPartition));
     int timeouts = 0;
     while (true) {
       ConsumerRecords<String, String> records = consumer.poll(200);
+      System.out.println("record partitions: " + records.partitions());
       if (records.count() == 0) {
         timeouts++;
       } else {
@@ -36,6 +46,8 @@ public class MyConsumer {
         timeouts = 0;
       }
       for (ConsumerRecord<String, String> record : records) {
+//        System.out.println("current offset : " + consumer.position(new TopicPartition(record.topic(), record.partition())));
+        System.out.println("current offset : " + record.offset());
         switch (record.topic()) {
           case "fast-messages":
             // the send time is encoded inside the message
