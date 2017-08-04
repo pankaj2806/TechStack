@@ -15,10 +15,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MyConsumer {
 
   public static Consumer<String, String> consumer;
+  public static String topic1 = "fast-messages";
+  public static String topic2 = "summary-markers";
 
   public static void main(String[] args) throws IOException {
     consumer = getLocalConsumer();
@@ -29,12 +33,11 @@ public class MyConsumer {
     ObjectMapper mapper = new ObjectMapper();
     Histogram stats = new Histogram(1, 10000000, 2);
     Histogram global = new Histogram(1, 10000000, 2);
-//    consumer.subscribe(Arrays.asList("fast-messages", "summary-markers"));
+    consumer.subscribe(Arrays.asList(topic1, topic2));
     TopicPartition topicPartition = new TopicPartition("fast-messages", 0);
-    List<PartitionInfo> partitionInfos = consumer.partitionsFor("fast-messages");
-    consumer.assign(Collections.singletonList(topicPartition));
+//    consumer.poll(200);
+//    consumer.assign(Collections.singletonList(topicPartition));
 //    consumer.seek(topicPartition, 5975484l);
-    consumer.seekToEnd(Collections.singletonList(topicPartition));
     int timeouts = 0;
     while (true) {
       ConsumerRecords<String, String> records = consumer.poll(200);
@@ -95,6 +98,17 @@ public class MyConsumer {
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
     return new KafkaConsumer<>(props);
+  }
+
+  public void resetOffSet() {
+    consumer.subscribe(Arrays.asList(topic1));
+    consumer.poll(200);
+    consumer.seekToEnd(getTopicPartitions(consumer, topic1));
+  }
+
+  private static List<TopicPartition> getTopicPartitions(Consumer<String, String> consumer, String topic) {
+    Stream<PartitionInfo> partitionInfos = consumer.partitionsFor(topic).stream();
+    return partitionInfos.map(partitionInfo -> new TopicPartition(topic, partitionInfo.partition())).collect(Collectors.toList());
   }
 
 }
