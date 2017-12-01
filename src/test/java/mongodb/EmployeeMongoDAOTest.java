@@ -21,15 +21,10 @@ public class EmployeeMongoDAOTest {
   }
 
 
-
   @Test
   public void mongoTest() {
     new EmployeeMongoDAO().printDatabases();
     new EmployeeMongoDAO().printDBCollections("mydb");
-
-
-
-
     new EmployeeMongoDAO().insert("mydb");
     new EmployeeMongoDAO().printAllDocuments("mydb");
     new EmployeeMongoDAO().printDBCollections("mydb");
